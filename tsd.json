@@ -1,0 +1,48 @@
+{
+  "version": "v4",
+  "repo": "borisyankov/DefinitelyTyped",
+  "ref": "master",
+  "path": "typings",
+  "bundle": "typings/tsd.d.ts",
+  "installed": {
+    "express/express.d.ts": {
+      "commit": "32f0a90dab26f70b206407ac24d4d622d0f0f408"
+    },
+    "node/node.d.ts": {
+      "commit": "70bf7e2bfeb0d5b1b651ef3219bcc65c8eec117e"
+    },
+    "serve-favicon/serve-favicon.d.ts": {
+      "commit": "32f0a90dab26f70b206407ac24d4d622d0f0f408"
+    },
+    "morgan/morgan.d.ts": {
+      "commit": "32f0a90dab26f70b206407ac24d4d622d0f0f408"
+    },
+    "cookie-parser/cookie-parser.d.ts": {
+      "commit": "32f0a90dab26f70b206407ac24d4d622d0f0f408"
+    },
+    "body-parser/body-parser.d.ts": {
+      "commit": "32f0a90dab26f70b206407ac24d4d622d0f0f408"
+    },
+    "debug/debug.d.ts": {
+      "commit": "32f0a90dab26f70b206407ac24d4d622d0f0f408"
+    },
+    "jquery/jquery.d.ts": {
+      "commit": "220716d99a77df1654fb4f6cd760dc134ffa8e89"
+    },
+    "async/async.d.ts": {
+      "commit": "81b951f1ac437d1eb5ff5171a0bfa6c467634b13"
+    },
+    "moment/moment.d.ts": {
+      "commit": "3a660aad87d58e01cc8abee3729ee058899e9380"
+    },
+    "moment/moment-node.d.ts": {
+      "commit": "3a660aad87d58e01cc8abee3729ee058899e9380"
+    },
+    "socket.io/socket.io.d.ts": {
+      "commit": "70bf7e2bfeb0d5b1b651ef3219bcc65c8eec117e"
+    },
+    "socket.io-client/socket.io-client.d.ts": {
+      "commit": "fab683ca77d0286b9d51aba6375deaceb41b22f5"
+    }
+  }
+}

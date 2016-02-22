@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Shop Floor</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+</head>
+<body>
+<div style="margin-bottom:10px;height:380px;">
+    <div style="float:left;width:290px">
+        <div class="panel panel-default" >
+            <div class="panel-heading"><h3 class="panel-title">create AGV</h3></div>
+            <div class="panel-body" >
+                <form id='createV' class="form-inline">
+                     <label>Number of AGV</label>
+                     <input type='text' name='amount' class="form-control" style='width:40px;' autocomplete='off'>
+                     <input type='submit' value='submit'class="btn btn-primary">
+                </form>
+            </div>
+        </div>
+        <div class="panel panel-default" >
+            <div class="panel-heading">
+                <h3 class="panel-title">create machine</h3>
+            </div>
+            <div class="panel-body">
+                <form id='createM' class="form-inline">
+                    <label>Number of Machine</label>
+                    <input type='text' name='amount' class="form-control" style='width:40px;' autocomplete='off'>
+                    <input id='cm' type='submit' value='submit' disabled='true'class="btn btn-primary">
+                </form>
+            </div>
+        </div>
+        <div class="panel panel-default" >
+            <div class="panel-heading"><h3 class="panel-title">close machine</h3></div>
+            <div class="panel-body" >
+                <form id='closeM'>
+                        <label>Machine id</label>
+                        <input type='text' id='id' style='width:40px;' autocomplete='off'>
+                        <input type='submit' value='close' class="btn btn-primary">
+                </form>
+            </div>
+        </div>
+    </div>
+    <div style="float:left;margin-left:20px;width: 400px">
+        <div class="panel panel-default" style="margin-bottom:10px">
+            <div class="panel-heading">
+            <h3 class="panel-title">add new job</h3>
+        </div>
+            <div class="panel-body">
+                <form id='submit' class="form-inline">
+                        <label>Rush Order</label>
+                        <input type='checkbox' name='rushOrder' checked='checked' /><br>
+                        <label>Due Date</label>
+                        <input type='text' id='year' name='year' class="form-control" placeholder='YYYY' style='width:60px;'autocomplete='off'>
+                    <span style="font-weight: bold">-</span>
+                        <input type='text' id='month' name='month' class="form-control" placeholder='MM' style='width:45px;'autocomplete='off'>
+                    <span style="font-weight: bold">-</span>
+                        <input type='text' id='day' name='day' class="form-control" placeholder='DD' style='width:45px;'autocomplete='off'>
+                    <span>&nbsp&nbsp</span>
+                        <input type='text' id='hour' name='hour' class="form-control" placeholder='hh' style='width:45px;'autocomplete='off'>
+                    <span style="font-weight: bold">:</span>
+                        <input type='text' id='minute' name='minute' class="form-control" placeholder='mm' style='width:45px;'autocomplete='off'><br>
+                        <input type='submit' value='submit' id='st' disabled='true' class="btn btn-primary">
+                </form>
+            </div>
+        </div><!-- create machine-->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">modify job</h3>
+            </div>
+            <div class="panel-body">
+                <form id='modify' class="form-inline" >
+                    <div class="form-group" >
+                        <label>Job Id</label>
+                        <input type='text' name='jid' class="form-control"/></div>
+                    <div class="form-group" style="margin-top: 5px">
+                        <label>Due Date</label>
+                        <input type='text' id='year' name='year' class="form-control" placeholder='YYYY' style='width:60px;'autocomplete='off'>
+                        <span style="font-weight: bold">-</span>
+                        <input type='text' id='month' name='month' class="form-control" placeholder='MM' style='width:45px;'autocomplete='off'>
+                        <span style="font-weight: bold">-</span>
+                        <input type='text' id='day' name='day' class="form-control" placeholder='DD' style='width:45px;'autocomplete='off'>
+                        <span>&nbsp&nbsp</span>
+                        <input type='text' id='hour' name='hour' class="form-control" placeholder='hh' style='width:45px;'autocomplete='off'>
+                        <span style="font-weight: bold">:</span>
+                        <input type='text' id='minute' name='minute' class="form-control" placeholder='mm' style='width:45px;'autocomplete='off'><br>
+                        <input type='submit' value='submit'  class="btn btn-primary">
+                    </div>
+                </form>
+            </div>
+        </div><!--modify job-->
+    </div>
+    <div style='float:left;width:500px;margin-left: 20px'>
+        <div class="panel panel-default">
+            <div class="panel-heading"><h3 class="panel-title">log</h3></div>
+        <div class="panel-body" id="log" style="overflow-y:scroll;height:312px"> </div>
+    </div>
+    </div>
+</div>
+<div style="width:1230px">
+    <div class="panel panel-default" >
+        <div class="panel-heading"><h3 class="panel-title">Machine State</h3></div>
+        <div class="panel-body" id="state">
+        </div>
+    </div>
+</div>
+<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src='http://code.jquery.com/jquery-2.1.4.js'></script>
+<script src='https://cdn.socket.io/socket.io-1.2.0.js'></script>
+<script src='/javascripts/data/Message.js'></script>
+<script src='http://momentjs.cn/downloads/moment-with-locales.js'></script>
+<script type='text/javascript'>
+    var socket = io();
+    var s = 'on';
+    var str=['Task id','Processing time(s)','Estimated completion time','Real completion time','Due date'];
+    $.fn.serializeObject = function() {
+        var o = {};
+        var a = this.serializeArray();
+        $.each(a,
+                function() {
+                    if (o[this.name] !== undefined) {
+                        if (!o[this.name].push) o[this.name] = [o[this.name]];
+                        o[this.name].push(this.value || '');
+                    } else o[this.name] = this.value || '';
+                });
+        return o;
+    };//form to json
+        $('#submit').on('submit',
+                function(e) {
+                    e.preventDefault();
+                    var m = new Message('UI', '', 'Cell', '', 'submit', JSON.stringify($(this).serializeObject()));
+                    socket.emit('message', m);
+                });//submit new job
+    $('#modify').on('submit',
+            function(e) {
+                e.preventDefault();
+                var m = new Message('UI', '', 'Machine', '*', 'modify', JSON.stringify($(this).serializeObject()));
+                socket.emit('message', m);
+            });//modify job
+        $('#createM').on('submit',
+                function(e) {
+                    e.preventDefault();
+                    var m = new Message('UI', '', 'Cell', '', 'create machine', JSON.stringify($(this).serializeObject()));
+                    socket.emit('message', m);
+                });//create machine
+        $('#createV').on('submit',
+                function(e) {
+                    e.preventDefault();
+                    var m = new Message('UI', '', 'Warehouse', '', 'create AGV', JSON.stringify($(this).serializeObject()));
+                    socket.emit('message', m);
+                })//create AGV
+        $('#closeM').on('submit',
+                function(e) {
+                    e.preventDefault();
+                    var m = new Message('UI', '', 'Machine',$('#id').val() , 'close', JSON.stringify({}));
+                    socket.emit('message', m);
+                });
+    window.onload = function init() {
+        var dd = new Date().getTime();
+        var d = new Date(dd + 120000);
+        $('#year').val(d.getFullYear());
+        $('#month').val(d.getMonth() + 1);
+        $('#day').val(d.getDate());
+        $('#hour').val(d.getHours());
+        $('#minute').val(d.getMinutes());
+        socket.emit('link', 'UI connection');
+        socket.on('log', function(msg){
+            $('#log').append($('<li>').text(msg));
+            $('#log').scrollTop($('#log').height());
+            if (msg.indexOf('AGV') >=0 && msg.indexOf('connection')>=0) document.getElementById('cm').disabled=false;
+            if (msg.indexOf('Machine') >=0 && msg.indexOf('connection')>=0) document.getElementById('st').disabled=false;
+            if (msg.indexOf('Machine') >=0 && msg.indexOf('closed')>=0) {
+             var id='D'+ msg.match(/Machine[0-9]+/)[0];
+             var div=document.getElementById(id);
+             div.parentNode.removeChild(div);
+             }
+        });
+        socket.on('message',function(msg){
+            if (msg.command=='task queue'){
+                var f=0;
+                var info=JSON.parse(msg.content);
+                if (document.getElementById('DMachine'+msg.s_id)){
+                    var id = 'TMachine'+msg.s_id;
+                    var table=document.getElementById(id);
+                    var tbody = document.createElement('tbody');
+                    table.replaceChild(tbody,table.tBodies[0]);
+                }else {
+                    var div = document.getElementById('state');
+                    var subDiv = document.createElement('div');
+                    subDiv.id = 'DMachine' + msg.s_id;
+                    subDiv.setAttribute('class','box');
+                    subDiv.setAttribute('style','margin-bottom:10px');
+                    div.appendChild(subDiv);
+                    var hdiv=document.createElement('div');
+                    hdiv.setAttribute('class','box-header');
+                    var bdiv=document.createElement('div');
+                    bdiv.setAttribute('class','box-body collapse in');
+                    bdiv.id='t'+msg.s_id;
+                    subDiv.appendChild(hdiv);
+                    subDiv.appendChild(bdiv);
+                    var h=document.createElement('h3');
+                    h.setAttribute('class','box-title');
+                    h.innerText='Machine'+msg.s_id;
+                    h.setAttribute('data-toggle','collapse');
+                    h.setAttribute('data-target','#t'+msg.s_id);
+                    hdiv.appendChild(h);
+                    var table = document.createElement('table');
+                    table.id = 'TMachine' + msg.s_id;
+                    table.setAttribute('class', 'table table-bordered table-striped');
+                    bdiv.appendChild(table);
+                    var thead=document.createElement('thead');
+                    var tbody = document.createElement('tbody');
+                    table.appendChild(thead);
+                    table.appendChild(tbody);
+                    thead.insertRow(0);
+                    for (var i=0;i<5;i++) {
+                        thead.rows[0].insertCell(i);
+                        thead.rows[0].cells[i].appendChild(document.createTextNode(str[i]));
+                    }
+                }
+                for (var i=0;i<info.length;i++){
+                    tbody.insertRow(i);
+                    if (info[i].realTime>0)  tbody.rows[i].setAttribute('style','background-color:#d0d0d0');
+                    for (var j=0;j<5;j++) tbody.rows[i].insertCell(j);
+                    tbody.rows[i].cells[0].appendChild(document.createTextNode(info[i].task.id));
+                    tbody.rows[i].cells[1].appendChild(document.createTextNode(info[i].task.processTime/1000));
+                    tbody.rows[i].cells[2].appendChild(document.createTextNode(moment(info[i].actualDueDate).format('YYYY-MM-DD HH:mm:ss.SSS')));
+                    if (info[i].realTime>0) tbody.rows[i].cells[3].appendChild(document.createTextNode(moment(info[i].realTime).format('YYYY-MM-DD HH:mm:ss.SSS')));
+                    else {
+                        if (f == 0) {
+                            tbody.rows[i].cells[3].appendChild(document.createTextNode('executing'));
+                            f++;
+                        }else tbody.rows[i].cells[3].appendChild(document.createTextNode('waiting'));
+                    }
+                    if (info[i].task.plannedDueDate==Number.MAX_VALUE) tbody.rows[i].cells[4].appendChild(document.createTextNode('9999-99-99 99:99:99.999'));
+                    else tbody.rows[i].cells[4].appendChild(document.createTextNode(moment(info[i].task.plannedDueDate).format('YYYY-MM-DD HH:mm:ss.SSS')));
+                }
+            }
+        })
+    }
+</script>
+</body>
+
+</html>
