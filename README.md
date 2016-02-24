@@ -43,8 +43,8 @@ In TigerFlow entities communicate by exchanging messages over a network
 When TigerFlow is initialized it starts the following services (cf.
 image below):
 
--   **Network**: responsible of broadcasting flow shop messages.In its 
--                current version, TigerFlow simulates a CAN bus network.
+-   **Network**: responsible of broadcasting flow shop messages. In its 
+                 current version, TigerFlow simulates a CAN bus network.
 
 -   **Cell**: in charge of allocating tasks in machines.
 
